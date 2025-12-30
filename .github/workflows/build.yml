@@ -1,4 +1,4 @@
-name: Build Car Rental System (.NET 8)
+name: Build WinForms App
 
 on:
   push:
@@ -11,17 +11,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repo
+      uses: actions/checkout@v4
 
-      - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
 
-      - name: Restore dependencies
-        run: dotnet restore
+    - name: Restore
+      run: dotnet restore Car-Rental-Management-System/Car-Rental-Management-System.csproj
 
-      - name: Build solution
-        run: dotnet build -c Release --no-restore
-
+    - name: Build
+      run: dotnet build Car-Rental-Management-System/Car-Rental-Management-System.csproj --configuration Release --no-restore
