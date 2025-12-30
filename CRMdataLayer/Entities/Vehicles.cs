@@ -40,5 +40,7 @@ namespace CRMdataLayer.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
         public string? Status { get; set; }
+        // In Vehicle.cs, add this property:
+        public virtual ICollection<Maintenance> Maintenances { get; set; } = new List<Maintenance>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// CRMdataLayer/Entities/Maintenance.cs
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,30 +9,56 @@ namespace CRMdataLayer.Entities
     public class Maintenance
     {
         [Key]
-        public int id { get; set; }
+        public int Id { get; set; }
 
-        // IMPORTANT: Database has typo "Vehicleld" (with lowercase L) not "VehicleId"
-        [Column("Vehicleld")] // Match the typo in database
+        [Required]
         public int VehicleId { get; set; }
 
         [ForeignKey("VehicleId")]
-        public virtual Vehicle? Vehicle { get; set; }
+        public Vehicle Vehicle { get; set; }
 
-        public string MaintenanceType { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        [Required]
+        [StringLength(100)]
+        public string MaintenanceType { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        [Required]
         public DateTime ScheduledDate { get; set; }
+
+        public DateTime? StartDate { get; set; }
+
         public DateTime? CompletionDate { get; set; }
 
-        // Database has typo "CurrentWileage" not "CurrentMileage"
-        public int CurrentWileage { get; set; }
+        public int? CurrentMileage { get; set; }
 
-        public string Status { get; set; } = "Scheduled";
-        public decimal Cost { get; set; }
-        public string? Notes { get; set; }
-        public string MechanicName { get; set; } = string.Empty;
-        public string? MechanicPhone { get; set; }
+        [Required]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal EstimatedCost { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? ActualCost { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Status { get; set; } = "Scheduled"; // Scheduled, In Progress, Completed, Cancelled
+
+        [StringLength(100)]
+        public string MechanicName { get; set; }
+        [StringLength(100)]
+        public string? CreatedBy { get; set; }
+
+        [StringLength(20)]
+        public string MechanicPhone { get; set; }
+
+        public string Notes { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
         public DateTime? UpdatedAt { get; set; }
-        public string CreatedBy { get; set; } = "System";
+
+        [Required]
+        public bool IsActive { get; set; } = true;
     }
 }

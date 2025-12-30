@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRMdataLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20251224211603_maintainace")]
-    partial class maintainace
+    [Migration("20251230105038_AddMaintenanceSchema")]
+    partial class AddMaintenanceSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,7 +103,16 @@ namespace CRMdataLayer.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasDefaultValue("System");
 
                     b.Property<int>("CurrentMileage")
                         .HasColumnType("int");
@@ -112,33 +121,32 @@ namespace CRMdataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("MaintenanceDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("MaintenanceType")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MechanicName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MechanicPhone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("NextMaintenanceDate")
+                    b.Property<DateTime>("ScheduledDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("NextServiceKm")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ServiceContact")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ServiceProvider")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasDefaultValue("Scheduled");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -148,7 +156,13 @@ namespace CRMdataLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ScheduledDate");
+
+                    b.HasIndex("Status");
+
                     b.HasIndex("VehicleId");
+
+                    b.HasIndex("Status", "ScheduledDate");
 
                     b.ToTable("Maintenances");
                 });
@@ -210,7 +224,7 @@ namespace CRMdataLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(18,2)");
@@ -229,7 +243,11 @@ namespace CRMdataLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedAt");
+
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("Status");
 
                     b.HasIndex("VehicleId");
 
@@ -252,7 +270,6 @@ namespace CRMdataLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("DailyRate")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("EngineNumber")
@@ -289,7 +306,6 @@ namespace CRMdataLayer.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("MonthlyRate")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("NextServiceDate")
@@ -328,7 +344,6 @@ namespace CRMdataLayer.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<decimal>("WeeklyRate")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Year")
@@ -401,9 +416,9 @@ namespace CRMdataLayer.Migrations
             modelBuilder.Entity("CRMdataLayer.Entities.Maintenance", b =>
                 {
                     b.HasOne("CRMdataLayer.Entities.Vehicle", "Vehicle")
-                        .WithMany()
+                        .WithMany("Maintenances")
                         .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Vehicle");
@@ -426,6 +441,11 @@ namespace CRMdataLayer.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("CRMdataLayer.Entities.Vehicle", b =>
+                {
+                    b.Navigation("Maintenances");
                 });
 #pragma warning restore 612, 618
         }

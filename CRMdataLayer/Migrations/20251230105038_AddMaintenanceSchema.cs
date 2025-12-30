@@ -5,7 +5,7 @@
 namespace CRMdataLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class maintn111 : Migration
+    public partial class AddMaintenanceSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRMdataLayer.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20251226200949_maintain")]
-    partial class maintain
+    [Migration("20251230120356_AddMaintenanceSche")]
+    partial class AddMaintenanceSche
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,66 +90,91 @@ namespace CRMdataLayer.Migrations
 
             modelBuilder.Entity("CRMdataLayer.Entities.Maintenance", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal?>("ActualCost")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("CompletionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasDefaultValue("System");
 
-                    b.Property<int>("CurrentWileage")
-                        .HasColumnType("int")
-                        .HasColumnName("CurrentWileage");
+                    b.Property<int?>("CurrentMileage")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("EstimatedCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MaintenanceType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MechanicName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MechanicPhone")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Notes")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ScheduledDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasDefaultValue("Scheduled");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("VehicleId")
-                        .HasColumnType("int")
-                        .HasColumnName("Vehicleld");
+                        .HasColumnType("int");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScheduledDate");
+
+                    b.HasIndex("Status");
 
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("Maintenances", (string)null);
+                    b.HasIndex("Status", "ScheduledDate");
+
+                    b.ToTable("Maintenances");
                 });
 
             modelBuilder.Entity("CRMdataLayer.Entities.Rentals", b =>
@@ -209,7 +234,7 @@ namespace CRMdataLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(18,2)");
@@ -228,7 +253,11 @@ namespace CRMdataLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedAt");
+
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("Status");
 
                     b.HasIndex("VehicleId");
 
@@ -251,7 +280,6 @@ namespace CRMdataLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("DailyRate")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("EngineNumber")
@@ -288,7 +316,6 @@ namespace CRMdataLayer.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("MonthlyRate")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("NextServiceDate")
@@ -327,7 +354,6 @@ namespace CRMdataLayer.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<decimal>("WeeklyRate")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Year")
@@ -400,7 +426,7 @@ namespace CRMdataLayer.Migrations
             modelBuilder.Entity("CRMdataLayer.Entities.Maintenance", b =>
                 {
                     b.HasOne("CRMdataLayer.Entities.Vehicle", "Vehicle")
-                        .WithMany()
+                        .WithMany("Maintenances")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -425,6 +451,11 @@ namespace CRMdataLayer.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("CRMdataLayer.Entities.Vehicle", b =>
+                {
+                    b.Navigation("Maintenances");
                 });
 #pragma warning restore 612, 618
         }

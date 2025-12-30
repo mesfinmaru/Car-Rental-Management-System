@@ -32,7 +32,6 @@
             btnAddMaintenance = new FontAwesome.Sharp.IconButton();
             btnEditMaintenance = new FontAwesome.Sharp.IconButton();
             btnDeleteMaintenance = new FontAwesome.Sharp.IconButton();
-            btnViewHistory = new FontAwesome.Sharp.IconButton();
             btnCompleteMaintenance = new FontAwesome.Sharp.IconButton();
             btnStartMaintenance = new FontAwesome.Sharp.IconButton();
             btnCancelMaintenance = new FontAwesome.Sharp.IconButton();
@@ -61,7 +60,6 @@
             lblScheduledDate = new Label();
             lblVehicle = new Label();
             btnSave = new FontAwesome.Sharp.IconButton();
-            btnCancel = new FontAwesome.Sharp.IconButton();
             ((System.ComponentModel.ISupportInitialize)dgvMaintenances).BeginInit();
             statusStrip.SuspendLayout();
             panelDetails.SuspendLayout();
@@ -71,7 +69,7 @@
             // 
             dgvMaintenances.AllowUserToAddRows = false;
             dgvMaintenances.AllowUserToDeleteRows = false;
-            dgvMaintenances.Anchor = AnchorStyles.None;
+            dgvMaintenances.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvMaintenances.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMaintenances.BackgroundColor = Color.FromArgb(45, 45, 65);
             dgvMaintenances.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -80,9 +78,9 @@
             dgvMaintenances.ReadOnly = true;
             dgvMaintenances.RowHeadersWidth = 62;
             dgvMaintenances.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMaintenances.Size = new Size(1251, 878);
+            dgvMaintenances.Size = new Size(1284, 944);
             dgvMaintenances.TabIndex = 0;
-    
+            dgvMaintenances.CellContentClick += dgvMaintenances_CellContentClick;
             // 
             // btnAddMaintenance
             // 
@@ -95,14 +93,14 @@
             btnAddMaintenance.IconColor = Color.White;
             btnAddMaintenance.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnAddMaintenance.IconSize = 25;
-            btnAddMaintenance.Location = new Point(513, 1085);
+            btnAddMaintenance.Location = new Point(626, 1085);
             btnAddMaintenance.Name = "btnAddMaintenance";
             btnAddMaintenance.Size = new Size(150, 50);
             btnAddMaintenance.TabIndex = 1;
             btnAddMaintenance.Text = "Add New";
             btnAddMaintenance.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAddMaintenance.UseVisualStyleBackColor = false;
-     
+            btnAddMaintenance.Click += btnAddMaintenance_Click_1;
             // 
             // btnEditMaintenance
             // 
@@ -115,14 +113,14 @@
             btnEditMaintenance.IconColor = Color.White;
             btnEditMaintenance.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnEditMaintenance.IconSize = 25;
-            btnEditMaintenance.Location = new Point(679, 1085);
+            btnEditMaintenance.Location = new Point(792, 1085);
             btnEditMaintenance.Name = "btnEditMaintenance";
             btnEditMaintenance.Size = new Size(150, 50);
             btnEditMaintenance.TabIndex = 2;
             btnEditMaintenance.Text = "Edit";
             btnEditMaintenance.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnEditMaintenance.UseVisualStyleBackColor = false;
-       
+            btnEditMaintenance.Click += btnEditMaintenance_Click_1;
             // 
             // btnDeleteMaintenance
             // 
@@ -135,34 +133,14 @@
             btnDeleteMaintenance.IconColor = Color.White;
             btnDeleteMaintenance.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnDeleteMaintenance.IconSize = 25;
-            btnDeleteMaintenance.Location = new Point(844, 1085);
+            btnDeleteMaintenance.Location = new Point(957, 1085);
             btnDeleteMaintenance.Name = "btnDeleteMaintenance";
             btnDeleteMaintenance.Size = new Size(150, 50);
             btnDeleteMaintenance.TabIndex = 3;
             btnDeleteMaintenance.Text = "Delete";
             btnDeleteMaintenance.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnDeleteMaintenance.UseVisualStyleBackColor = false;
-       
-            // 
-            // btnViewHistory
-            // 
-            btnViewHistory.Anchor = AnchorStyles.Bottom;
-            btnViewHistory.BackColor = Color.DarkOrchid;
-            btnViewHistory.FlatStyle = FlatStyle.Flat;
-            btnViewHistory.Font = new Font("Segoe UI", 9F);
-            btnViewHistory.ForeColor = Color.White;
-            btnViewHistory.IconChar = FontAwesome.Sharp.IconChar.ClockRotateLeft;
-            btnViewHistory.IconColor = Color.White;
-            btnViewHistory.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            btnViewHistory.IconSize = 25;
-            btnViewHistory.Location = new Point(1011, 1085);
-            btnViewHistory.Name = "btnViewHistory";
-            btnViewHistory.Size = new Size(193, 50);
-            btnViewHistory.TabIndex = 4;
-            btnViewHistory.Text = "View History";
-            btnViewHistory.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnViewHistory.UseVisualStyleBackColor = false;
-     
+            btnDeleteMaintenance.Click += btnDeleteMaintenance_Click_1;
             // 
             // btnCompleteMaintenance
             // 
@@ -175,14 +153,14 @@
             btnCompleteMaintenance.IconColor = Color.White;
             btnCompleteMaintenance.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnCompleteMaintenance.IconSize = 25;
-            btnCompleteMaintenance.Location = new Point(1220, 1085);
+            btnCompleteMaintenance.Location = new Point(1118, 1085);
             btnCompleteMaintenance.Name = "btnCompleteMaintenance";
             btnCompleteMaintenance.Size = new Size(169, 50);
             btnCompleteMaintenance.TabIndex = 5;
             btnCompleteMaintenance.Text = "Complete";
             btnCompleteMaintenance.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnCompleteMaintenance.UseVisualStyleBackColor = false;
-    
+            btnCompleteMaintenance.Click += btnCompleteMaintenance_Click_1;
             // 
             // btnStartMaintenance
             // 
@@ -195,14 +173,15 @@
             btnStartMaintenance.IconColor = Color.White;
             btnStartMaintenance.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnStartMaintenance.IconSize = 25;
-            btnStartMaintenance.Location = new Point(1403, 1085);
+            btnStartMaintenance.Location = new Point(1301, 1085);
             btnStartMaintenance.Name = "btnStartMaintenance";
             btnStartMaintenance.Size = new Size(150, 50);
             btnStartMaintenance.TabIndex = 6;
             btnStartMaintenance.Text = "Start";
             btnStartMaintenance.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnStartMaintenance.UseVisualStyleBackColor = false;
- 
+            btnStartMaintenance.Click += btnStartMaintenance_Click_1;
+            // 
             // btnCancelMaintenance
             // 
             btnCancelMaintenance.Anchor = AnchorStyles.Bottom;
@@ -214,14 +193,14 @@
             btnCancelMaintenance.IconColor = Color.White;
             btnCancelMaintenance.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnCancelMaintenance.IconSize = 25;
-            btnCancelMaintenance.Location = new Point(1568, 1085);
+            btnCancelMaintenance.Location = new Point(1466, 1085);
             btnCancelMaintenance.Name = "btnCancelMaintenance";
             btnCancelMaintenance.Size = new Size(150, 50);
             btnCancelMaintenance.TabIndex = 7;
             btnCancelMaintenance.Text = "Cancel";
             btnCancelMaintenance.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnCancelMaintenance.UseVisualStyleBackColor = false;
-         
+            btnCancelMaintenance.Click += btnCancelMaintenance_Click_1;
             // 
             // txtSearch
             // 
@@ -233,7 +212,7 @@
             txtSearch.PlaceholderText = "Search by vehicle plate, description, or mechanic...";
             txtSearch.Size = new Size(715, 43);
             txtSearch.TabIndex = 8;
- 
+            txtSearch.TextChanged += txtSearch_TextChanged_1;
             // 
             // cmbStatusFilter
             // 
@@ -244,18 +223,18 @@
             cmbStatusFilter.ForeColor = Color.White;
             cmbStatusFilter.FormattingEnabled = true;
             cmbStatusFilter.Items.AddRange(new object[] { "All", "Scheduled", "In Progress", "Completed", "Cancelled" });
-            cmbStatusFilter.Location = new Point(1884, 47);
+            cmbStatusFilter.Location = new Point(1917, 47);
             cmbStatusFilter.Name = "cmbStatusFilter";
             cmbStatusFilter.Size = new Size(250, 45);
             cmbStatusFilter.TabIndex = 10;
-
+            cmbStatusFilter.SelectedIndexChanged += cmbStatusFilter_SelectedIndexChanged_1;
             // 
             // lblStatusFilter
             // 
             lblStatusFilter.AutoSize = true;
             lblStatusFilter.Font = new Font("Segoe UI", 10F);
             lblStatusFilter.ForeColor = Color.White;
-            lblStatusFilter.Location = new Point(1764, 50);
+            lblStatusFilter.Location = new Point(1817, 53);
             lblStatusFilter.Name = "lblStatusFilter";
             lblStatusFilter.Size = new Size(94, 37);
             lblStatusFilter.TabIndex = 11;
@@ -280,7 +259,6 @@
             // 
             // panelDetails
             // 
-            panelDetails.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             panelDetails.BackColor = Color.FromArgb(45, 45, 65);
             panelDetails.BorderStyle = BorderStyle.FixedSingle;
             panelDetails.Controls.Add(txtNotes);
@@ -302,10 +280,9 @@
             panelDetails.Controls.Add(lblScheduledDate);
             panelDetails.Controls.Add(lblVehicle);
             panelDetails.Controls.Add(btnSave);
-            panelDetails.Controls.Add(btnCancel);
             panelDetails.Location = new Point(88, 47);
             panelDetails.Name = "panelDetails";
-            panelDetails.Size = new Size(761, 951);
+            panelDetails.Size = new Size(761, 1017);
             panelDetails.TabIndex = 13;
             panelDetails.Visible = false;
             // 
@@ -359,6 +336,7 @@
             txtMileage.Name = "txtMileage";
             txtMileage.Size = new Size(450, 39);
             txtMileage.TabIndex = 16;
+            txtMileage.TextChanged += txtMileage_TextChanged;
             // 
             // txtDescription
             // 
@@ -450,9 +428,9 @@
             lblCost.ForeColor = Color.White;
             lblCost.Location = new Point(50, 385);
             lblCost.Name = "lblCost";
-            lblCost.Size = new Size(100, 32);
+            lblCost.Size = new Size(66, 32);
             lblCost.TabIndex = 7;
-            lblCost.Text = "Cost ($):";
+            lblCost.Text = "Cost:";
             // 
             // lblMileage
             // 
@@ -519,33 +497,14 @@
             btnSave.IconColor = Color.White;
             btnSave.IconFont = FontAwesome.Sharp.IconFont.Auto;
             btnSave.IconSize = 25;
-            btnSave.Location = new Point(565, 848);
+            btnSave.Location = new Point(565, 911);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(150, 50);
             btnSave.TabIndex = 1;
             btnSave.Text = "Save";
             btnSave.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnSave.UseVisualStyleBackColor = false;
-       
-            // 
-            // btnCancel
-            // 
-            btnCancel.BackColor = Color.IndianRed;
-            btnCancel.FlatStyle = FlatStyle.Flat;
-            btnCancel.Font = new Font("Segoe UI", 9F);
-            btnCancel.ForeColor = Color.White;
-            btnCancel.IconChar = FontAwesome.Sharp.IconChar.Close;
-            btnCancel.IconColor = Color.White;
-            btnCancel.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            btnCancel.IconSize = 25;
-            btnCancel.Location = new Point(362, 848);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(150, 50);
-            btnCancel.TabIndex = 0;
-            btnCancel.Text = "Cancel";
-            btnCancel.TextImageRelation = TextImageRelation.ImageBeforeText;
-            btnCancel.UseVisualStyleBackColor = false;
-       
+            btnSave.Click += btnSave_Click_1;
             // 
             // MaintenanceForm
             // 
@@ -561,7 +520,6 @@
             Controls.Add(btnCancelMaintenance);
             Controls.Add(btnStartMaintenance);
             Controls.Add(btnCompleteMaintenance);
-            Controls.Add(btnViewHistory);
             Controls.Add(btnDeleteMaintenance);
             Controls.Add(btnEditMaintenance);
             Controls.Add(btnAddMaintenance);
@@ -585,7 +543,6 @@
         private FontAwesome.Sharp.IconButton btnAddMaintenance;
         private FontAwesome.Sharp.IconButton btnEditMaintenance;
         private FontAwesome.Sharp.IconButton btnDeleteMaintenance;
-        private FontAwesome.Sharp.IconButton btnViewHistory;
         private FontAwesome.Sharp.IconButton btnCompleteMaintenance;
         private FontAwesome.Sharp.IconButton btnStartMaintenance;
         private FontAwesome.Sharp.IconButton btnCancelMaintenance;
@@ -614,6 +571,5 @@
         private Label lblScheduledDate;
         private Label lblVehicle;
         private FontAwesome.Sharp.IconButton btnSave;
-        private FontAwesome.Sharp.IconButton btnCancel;
     }
 }

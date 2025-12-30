@@ -219,7 +219,7 @@ namespace Car_Rental_Management_System.Forms
                                        $"{customer.Phone,-15} " +
                                        $"{customer.RegistrationDate:yyyy-MM-dd,-12} " +
                                        $"{customer.TotalRentals,-8} " +
-                                       $"{customer.TotalSpent:C,-15} " +
+                                       $"{customer.TotalSpent:ETB #,##0.0} " +
                                        $"{status,-10}\n");
                 }
             }
@@ -266,7 +266,7 @@ namespace Car_Rental_Management_System.Forms
                                        $"{rental.StartDate:yyyy-MM-dd,-12} " +
                                        $"{rental.EndDate:yyyy-MM-dd,-12} " +
                                        $"{rental.RentalDays,-5} " +
-                                       $"{rental.TotalAmount:C,-12} " +
+                                       $"{rental.TotalAmount:ETB #,##0.0} " +
                                        $"{rental.Status,-10} " +
                                        $"{paidStatus,-6}\n");
                 }
@@ -311,10 +311,10 @@ namespace Car_Rental_Management_System.Forms
                                        $"{vehicle.VehicleType,-10} " +
                                        $"{vehicle.Year,-6} " +
                                        $"{vehicle.Color,-10} " +
-                                       $"{vehicle.DailyRate:C,-10} " +
+                                       $"{vehicle.DailyRate:ETB #,##0.0} " +
                                        $"{vehicle.Status,-12} " +
                                        $"{vehicle.TimesRented,-8} " +
-                                       $"{vehicle.TotalRevenue:C,-12}\n");
+                                       $"{vehicle.TotalRevenue:ETB #,##0.0}\n");
                 }
             }
             catch (Exception ex)
@@ -356,16 +356,16 @@ namespace Car_Rental_Management_System.Forms
                                        $"{finance.RentalDate:yyyy-MM-dd,-12} " +
                                        $"{finance.CustomerName,-20} " +
                                        $"{finance.VehicleInfo,-20} " +
-                                       $"{finance.Revenue:C,-12} " +
+                                       $"{finance.Revenue:ETB #,##0.0} " +
                                        $"{finance.PaymentMethod,-15} " +
                                        $"{finance.TransactionId,-20}\n");
                 }
 
                 // Add summary
                 rtbReport.AppendText("\n" + new string('=', 80) + "\n");
-                rtbReport.AppendText($"TOTAL REVENUE: {totalRevenue:C}\n");
+                rtbReport.AppendText($"TOTAL REVENUE: {totalRevenue:ETB #,##0.0}\n");
                 rtbReport.AppendText($"TOTAL TRANSACTIONS: {financials.Count}\n");
-                rtbReport.AppendText($"AVERAGE TRANSACTION: {(financials.Count > 0 ? totalRevenue / financials.Count : 0):C}\n");
+                rtbReport.AppendText($"AVERAGE TRANSACTION: {(financials.Count > 0 ? totalRevenue / financials.Count : 0):ETB #,##0.0}\n");
             }
             catch (Exception ex)
             {
@@ -413,17 +413,17 @@ namespace Car_Rental_Management_System.Forms
                                        $"{overdue.VehicleInfo,-20} " +
                                        $"{overdue.EndDate:yyyy-MM-dd,-12} " +
                                        $"{overdue.DaysOverdue,-5} " +
-                                       $"{overdue.TotalAmount:C,-12} " +
-                                       $"{(overdue.LateFee?.ToString("C") ?? "N/A"),-10}\n");
+                                       $"{overdue.TotalAmount:ETB #,##0.0} " +
+                                       $"{(overdue.LateFee?.ToString("ETB #,##0.0") ?? "N/A"),-10}\n");
                 }
 
                 // Add summary
                 rtbReport.AppendText("\n" + new string('=', 80) + "\n");
                 rtbReport.AppendText($"TOTAL OVERDUE RENTALS: {totalOverdue}\n");
                 rtbReport.AppendText($"MAXIMUM DAYS OVERDUE: {overdueRentals.Max(o => o.DaysOverdue)} days\n");
-                rtbReport.AppendText($"TOTAL RENTAL AMOUNT: {totalAmount:C}\n");
-                rtbReport.AppendText($"TOTAL POTENTIAL LATE FEES: {totalLateFees:C}\n");
-                rtbReport.AppendText($"TOTAL POTENTIAL REVENUE: {(totalAmount + totalLateFees):C}\n");
+                rtbReport.AppendText($"TOTAL RENTAL AMOUNT: {totalAmount:ETB #,##0.0}\n");
+                rtbReport.AppendText($"TOTAL POTENTIAL LATE FEES: {totalLateFees:ETB #,##0.0}\n");
+                rtbReport.AppendText($"TOTAL POTENTIAL REVENUE: {(totalAmount + totalLateFees):ETB #,##0.0}\n");
             }
             catch (Exception ex)
             {
@@ -446,7 +446,7 @@ namespace Car_Rental_Management_System.Forms
                     rtbReport.AppendText("REPORT SUMMARY\n");
                     rtbReport.AppendText(new string('-', 40) + "\n");
                     rtbReport.AppendText($"Total Records: {_currentReportData.Count}\n");
-                    rtbReport.AppendText($"Total Revenue: {summary.TotalRevenue:C}\n");
+                    rtbReport.AppendText($"Total Revenue: {summary.TotalRevenue:ETB #,##0.0}\n");
                     rtbReport.AppendText($"Active Rentals: {summary.ActiveRentals}\n");
                     rtbReport.AppendText($"Overdue Rentals: {summary.OverdueRentals}\n");
                     rtbReport.AppendText($"Total Customers: {summary.TotalCustomers}\n");

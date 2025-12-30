@@ -24,7 +24,7 @@ namespace CRMdataLayer
             if (!optionsBuilder.IsConfigured)
             {
                 // This is for migrations only
-                optionsBuilder.UseSqlServer("Server =.; Database = CarRentalDB1; user Id = sa; Password = 12345678; MultipleActiveResultSets = true; TrustServerCertificate = True; ");
+                optionsBuilder.UseSqlServer("Server =.; Database = CarRentalDB; user Id = sa; Password = 12345678; MultipleActiveResultSets = true; TrustServerCertificate = True; ");
             }
         }
         // DbSet properties
@@ -37,6 +37,7 @@ namespace CRMdataLayer
         {
             base.OnModelCreating(modelBuilder);
 
+            // Users configuration
             modelBuilder.Entity<Users>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -46,11 +47,7 @@ namespace CRMdataLayer
                 entity.Property(e => e.FullName).HasMaxLength(100);
                 entity.Property(e => e.Email).HasMaxLength(100);
                 entity.Property(e => e.Phone).HasMaxLength(20);
-
-                // Add index for username
                 entity.HasIndex(e => e.Username).IsUnique();
-
-
             });
 
             // Customer configuration
@@ -65,105 +62,109 @@ namespace CRMdataLayer
                 entity.Property(e => e.Country).HasMaxLength(50);
                 entity.Property(e => e.LicenseNumber).HasMaxLength(20);
                 entity.Property(e => e.LicenseType).HasMaxLength(50);
-
-                // Add indexes
                 entity.HasIndex(e => e.Phone).IsUnique();
                 entity.HasIndex(e => e.Email);
                 entity.HasIndex(e => e.IsActive);
             });
 
+            // Vehicle configuration
             modelBuilder.Entity<Vehicle>(entity =>
             {
                 entity.HasKey(e => e.Id);
+                entity.Property(e => e.PlateNumber).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.Make).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Model).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.Year).IsRequired();
+                entity.Property(e => e.Color).HasMaxLength(30);
+                entity.Property(e => e.VehicleType).HasMaxLength(30);
+                entity.Property(e => e.Transmission).HasMaxLength(20);
+                entity.Property(e => e.FuelType).HasMaxLength(20);
+                entity.Property(e => e.VIN).HasMaxLength(17);
+                entity.Property(e => e.EngineNumber).HasMaxLength(50);
+                entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("Available");
 
-                entity.Property(e => e.PlateNumber)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                // Decimal properties with precision
+                entity.Property(e => e.DailyRate).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.WeeklyRate).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.MonthlyRate).HasColumnType("decimal(18,2)");
 
-                entity.Property(e => e.Make)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Model)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Year)
-                    .IsRequired();
-
-                entity.Property(e => e.Color)
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.VehicleType)
-                    .HasMaxLength(30);
-
-                entity.Property(e => e.Transmission)
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.FuelType)
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.VIN)
-                    .HasMaxLength(17);
-
-                entity.Property(e => e.EngineNumber)
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Status)
-                    .HasMaxLength(20)
-                    .HasDefaultValue("Available");
-
-                entity.Property(e => e.DailyRate)
-                    .HasPrecision(18, 2);
-
-                entity.Property(e => e.WeeklyRate)
-                    .HasPrecision(18, 2);
-
-                entity.Property(e => e.MonthlyRate)
-                    .HasPrecision(18, 2);
-
-                // Add indexes
-                entity.HasIndex(e => e.PlateNumber)
-                    .IsUnique();
-
-                entity.HasIndex(e => e.VIN)
-                    .IsUnique()
-                    .HasFilter("[VIN] IS NOT NULL");
-
+                entity.HasIndex(e => e.PlateNumber).IsUnique();
+                entity.HasIndex(e => e.VIN).IsUnique().HasFilter("[VIN] IS NOT NULL");
                 entity.HasIndex(e => e.IsActive);
                 entity.HasIndex(e => e.IsAvailable);
                 entity.HasIndex(e => e.Status);
             });
-            // In AppDBContext.cs
 
-        
-
-            // SIMPLE Maintenance configuration - match EXACT database schema
-            modelBuilder.Entity<Maintenance>(entity =>
+            // Rentals configuration - FIXED with decimal precision
+            modelBuilder.Entity<Rentals>(entity =>
             {
-                entity.ToTable("Maintenances");
-                entity.HasKey(e => e.id);
+                entity.HasKey(e => e.Id);
 
-                // Map the typo in database column name
-                entity.Property(e => e.VehicleId)
-                      .HasColumnName("Vehicleld"); // lowercase L
+                // Configure all decimal properties with precision
+                entity.Property(e => e.AmountPaid).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.BalanceDue).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.DailyRate).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.DamageFee).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Discount).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.LateFee).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.SubTotal).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.TotalAmount).HasColumnType("decimal(18,2)");
 
-                // Map the typo in mileage column
-                entity.Property(e => e.CurrentWileage)
-                      .HasColumnName("CurrentWileage");
-
-                // Simple relationship
-                entity.HasOne(m => m.Vehicle)
-                      .WithMany()
-                      .HasForeignKey(m => m.VehicleId)
-                      .OnDelete(DeleteBehavior.Restrict);
+                // Add indexes and other configurations as needed
+                entity.HasIndex(e => e.CustomerId);
+                entity.HasIndex(e => e.VehicleId);
+                entity.HasIndex(e => e.Status);
+                entity.HasIndex(e => e.CreatedAt);
             });
 
-          
+            // MAINTENANCE CONFIGURATION
+            modelBuilder.Entity<Maintenance>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                // Configure decimal property
+                entity.Property(e => e.ActualCost)
+                    .HasColumnType("decimal(18,2)");
+
+                // String properties with length
+                entity.Property(e => e.MaintenanceType)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(50)
+                    .IsRequired()
+                    .HasDefaultValue("Scheduled");
+
+                entity.Property(e => e.MechanicName)
+                    .HasMaxLength(100)
+                    .IsRequired();
+
+                entity.Property(e => e.MechanicPhone)
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(100)
+                    .HasDefaultValue("System");
+
+                // Default values
+                entity.Property(e => e.CreatedAt)
+                    .HasDefaultValueSql("GETUTCDATE()");
+
+                // Relationship
+                entity.HasOne(m => m.Vehicle)
+                    .WithMany(v => v.Maintenances)
+                    .HasForeignKey(m => m.VehicleId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                // Indexes
+                entity.HasIndex(e => e.VehicleId);
+                entity.HasIndex(e => e.Status);
+                entity.HasIndex(e => e.ScheduledDate);
+                entity.HasIndex(e => new { e.Status, e.ScheduledDate });
+            });
+
+           
         }
     }
-
-    }
-  
-    
-
+}
