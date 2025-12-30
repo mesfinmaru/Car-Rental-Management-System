@@ -282,7 +282,7 @@
             panelDetails.Controls.Add(btnSave);
             panelDetails.Location = new Point(88, 47);
             panelDetails.Name = "panelDetails";
-            panelDetails.Size = new Size(761, 1017);
+            panelDetails.Size = new Size(776, 1017);
             panelDetails.TabIndex = 13;
             panelDetails.Visible = false;
             // 
