@@ -1,36 +1,33 @@
-name: Publish Single EXE
+name: Publish WinForms EXE
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  workflow_dispatch:   # manual run button
 
 jobs:
   publish:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout repo
+      uses: actions/checkout@v4
 
-      - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
 
-      - name: Publish WinForms as Single EXE
-        run: >
-          dotnet publish
-          Car-Rental-Management-System/Car-Rental-Management-System.csproj
-          -c Release
-          -r win-x64
-          --self-contained true
-          /p:PublishSingleFile=true
-          /p:IncludeNativeLibrariesForSelfExtract=true
-          /p:UseWindowsForms=true
+    - name: Publish EXE
+      run: |
+        dotnet publish Car-Rental-Management-System/Car-Rental-Management-System.csproj `
+          -c Release `
+          -r win-x64 `
+          --self-contained true `
+          /p:PublishSingleFile=true `
+          /p:IncludeNativeLibrariesForSelfExtract=true `
+          -o publish
 
-      - name: Upload EXE
-        uses: actions/upload-artifact@v4
-        with:
-          name: Car-Rental-System-EXE
-          path: |
-            Car-Rental-Management-System/bin/Release/**/publish/*.exe
+    - name: Upload EXE
+      uses: actions/upload-artifact@v4
+      with:
+        name: CarRental-WinForms-EXE
+        path: publish
