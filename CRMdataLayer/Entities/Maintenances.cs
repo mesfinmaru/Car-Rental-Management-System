@@ -15,14 +15,14 @@ namespace CRMdataLayer.Entities
         public int VehicleId { get; set; }
 
         [ForeignKey("VehicleId")]
-        public Vehicle Vehicle { get; set; }
+        public Vehicle? Vehicle { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string MaintenanceType { get; set; }
+        public string? MaintenanceType { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required]
         public DateTime ScheduledDate { get; set; }
@@ -42,17 +42,17 @@ namespace CRMdataLayer.Entities
 
         [Required]
         [StringLength(50)]
-        public string Status { get; set; } = "Scheduled"; // Scheduled, In Progress, Completed, Cancelled
+        public string? Status { get; set; } = "Scheduled"; // Scheduled, In Progress, Completed, Cancelled
 
         [StringLength(100)]
-        public string MechanicName { get; set; }
+        public string? MechanicName { get; set; }
         [StringLength(100)]
         public string? CreatedBy { get; set; }
 
         [StringLength(20)]
-        public string MechanicPhone { get; set; }
+        public string? MechanicPhone { get; set; }
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
